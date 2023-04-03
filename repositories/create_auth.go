@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (rp *Repo) CreateAuthRepository(db *sql.DB, contact, passwordHash string) error {
+func CreateAuthRepository(db *sql.DB, contact, passwordHash string) error {
 	stmt, err := db.Prepare(`INSERT INTO auths("contact", "password") VALUES ('$1', '$2')`)
 	if err != nil {
 		return err
