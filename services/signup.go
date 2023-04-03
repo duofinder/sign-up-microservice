@@ -1,17 +1,14 @@
 package services
 
 import (
-	"database/sql"
 	"net/http"
 
-	"github.com/duofinder/auth-microservice/repositories"
 	"github.com/duofinder/auth-microservice/types"
-	"github.com/duofinder/auth-microservice/utils"
 	"github.com/gin-gonic/gin"
 )
 
-func SignupService(login *types.SignupInput, db *sql.DB, repo *repositories.Repo) *types.Response {
-	hash, err := utils.EncryptPassword(login.Password)
+func SignupService(input *types.SignupInput) *types.Response {
+	hash, err := input.EncryptPasswordFunc(input.Password)
 	if err != nil {
 		return &types.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -19,7 +16,7 @@ func SignupService(login *types.SignupInput, db *sql.DB, repo *repositories.Repo
 		}
 	}
 
-	err = repo.CreateAuthRepository(db, login.Contact, hash)
+	err = input.CreateAuthRepository(input.DB, input.Contact, hash)
 	if err != nil {
 		return &types.Response{
 			StatusCode: http.StatusInternalServerError,
