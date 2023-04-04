@@ -10,7 +10,6 @@ RUN go mod download
 
 COPY main.go ./
 
-COPY ./config ./config
 COPY ./handlers ./handlers
 COPY ./repositories ./repositories
 COPY ./services ./services

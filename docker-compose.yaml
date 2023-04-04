@@ -9,6 +9,7 @@ services:
       POSTGRES_DB: ${PG_DB}
     ports:
       - "5432:5432"
+    hostname: 127.0.0.1
   microservice:
     env_file:
       - .env
