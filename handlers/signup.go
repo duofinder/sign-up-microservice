@@ -21,10 +21,11 @@ func SignupRoute(r *gin.Engine, db *sql.DB) {
 		}
 
 		resp := services.SignupService(&types.SignupInput{
-			UserData:             login,
-			DB:                   db,
-			EncryptPasswordFunc:  utils.EncryptPassword,
-			CreateAuthRepository: repositories.CreateAuthRepository,
+			UserData:                 login,
+			DB:                       db,
+			EncryptPasswordFunc:      utils.EncryptPassword,
+			GenerateRefreshTokenFunc: utils.GenerateRefreshToken,
+			CreateAuthRepository:     repositories.CreateAuthRepository,
 		})
 
 		ctx.JSON(resp.StatusCode, resp.Body)

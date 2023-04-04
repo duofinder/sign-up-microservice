@@ -32,7 +32,7 @@ func Test_Service_Signup(t *testing.T) {
 					EncryptPasswordFunc: func(password string) (string, error) {
 						return "hey, a hashed password", nil
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash string) error {
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
 						return nil
 					},
 				},
@@ -54,7 +54,7 @@ func Test_Service_Signup(t *testing.T) {
 					EncryptPasswordFunc: func(password string) (string, error) {
 						return "", fmt.Errorf("something failed")
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash string) error {
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
 						return nil
 					},
 				},
@@ -76,7 +76,7 @@ func Test_Service_Signup(t *testing.T) {
 					EncryptPasswordFunc: func(password string) (string, error) {
 						return "hey, a hashed password", nil
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash string) error {
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
 						return fmt.Errorf("something failed")
 					},
 				},
