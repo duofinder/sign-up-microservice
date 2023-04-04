@@ -10,6 +10,8 @@ services:
     ports:
       - "5432:5432"
     hostname: 127.0.0.1
+    volumes:
+      - ./initialize.sql:/docker-entrypoint-initdb.d/init.sql
   microservice:
     env_file:
       - .env
