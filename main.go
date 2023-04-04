@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/duofinder/auth-microservice/handlers"
+	"github.com/duofinder/sign-up-microservice/handlers"
 	"github.com/gin-gonic/gin"
 
 	_ "github.com/lib/pq"

@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/duofinder/auth-microservice/repositories"
-	"github.com/duofinder/auth-microservice/services"
-	"github.com/duofinder/auth-microservice/types"
-	"github.com/duofinder/auth-microservice/utils"
+	"github.com/duofinder/sign-up-microservice/repositories"
+	"github.com/duofinder/sign-up-microservice/services"
+	"github.com/duofinder/sign-up-microservice/types"
+	"github.com/duofinder/sign-up-microservice/utils"
 	"github.com/gin-gonic/gin"
 )
 

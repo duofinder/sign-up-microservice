@@ -1,4 +1,4 @@
-module github.com/duofinder/auth-microservice
+module github.com/duofinder/sign-up-microservice
 
 go 1.19
 

@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/duofinder/auth-microservice/types"
+	"github.com/duofinder/sign-up-microservice/types"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,6 +32,9 @@ func Test_Service_Signup(t *testing.T) {
 					EncryptPasswordFunc: func(password string) (string, error) {
 						return "hey, a hashed password", nil
 					},
+					GenerateRefreshTokenFunc: func() (string, error) {
+						return "hey, a refresh token", nil
+					},
 					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
 						return nil
 					},
@@ -54,6 +57,9 @@ func Test_Service_Signup(t *testing.T) {
 					EncryptPasswordFunc: func(password string) (string, error) {
 						return "", fmt.Errorf("something failed")
 					},
+					GenerateRefreshTokenFunc: func() (string, error) {
+						return "hey, a refresh token", nil
+					},
 					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
 						return nil
 					},
@@ -75,6 +81,9 @@ func Test_Service_Signup(t *testing.T) {
 					DB: nil,
 					EncryptPasswordFunc: func(password string) (string, error) {
 						return "hey, a hashed password", nil
+					},
+					GenerateRefreshTokenFunc: func() (string, error) {
+						return "hey, a refresh token", nil
 					},
 					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
 						return fmt.Errorf("something failed")
