@@ -3,24 +3,25 @@ package repositories
 import (
 	"database/sql"
 	"fmt"
-	"log"
 )
 
-func CreateAuthRepository(db *sql.DB, contact, passwordHash string) error {
-	result, err := db.Exec(`INSERT INTO auths("contact", "password") VALUES ('$1', '$2')`, contact, passwordHash)
+func CreateAuthRepository(db *sql.DB, contact, passwordHash, refreshToken string) error {
+	sqmt, err := db.Prepare(`INSERT INTO auths("contact", "password", "refresh_token") VALUES ($1, $2, $3)`)
 	if err != nil {
-		log.Println(2)
+		return err
+	}
+
+	result, err := sqmt.Exec(contact, passwordHash, refreshToken)
+	if err != nil {
 		return err
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		log.Println(3)
 		return err
 	}
 
 	if rowsAff != 1 {
-		log.Println(4)
 		return fmt.Errorf("Internal Server Error")
 	}
 
