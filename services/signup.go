@@ -3,7 +3,7 @@ package services
 import (
 	"net/http"
 
-	"github.com/duofinder/auth-microservice/types"
+	"github.com/duofinder/sign-up-microservice/types"
 	"github.com/gin-gonic/gin"
 )
 
