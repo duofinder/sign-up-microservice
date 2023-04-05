@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/duofinder/sign-up-microservice/handlers"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	_ "github.com/lib/pq"
@@ -24,8 +25,13 @@ func main() {
 
 	logger := log.Default()
 
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+	router.Use(cors.New(config))
 
 	db, err := sql.Open("postgres", os.Getenv("DATABASE_POSTGRES_CONNSTR"))
 	if err != nil {
