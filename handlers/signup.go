@@ -26,6 +26,7 @@ func SignupRoute(r *gin.Engine, db *sql.DB) {
 			EncryptPasswordFunc:      utils.EncryptPassword,
 			GenerateRefreshTokenFunc: utils.GenerateRefreshToken,
 			CreateAuthRepository:     repositories.CreateAuthRepository,
+			GenerateAccessTokenFunc:  utils.GenerateAccessToken,
 		})
 
 		ctx.JSON(resp.StatusCode, resp.Body)

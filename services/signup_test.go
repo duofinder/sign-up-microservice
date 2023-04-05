@@ -12,6 +12,10 @@ import (
 )
 
 func Test_Service_Signup(t *testing.T) {
+	var userId int64 = 1
+	refreshToken := "refreshtoken"
+	accessToken := "accesstoken"
+
 	type args struct {
 		input *types.SignupInput
 	}
@@ -30,19 +34,26 @@ func Test_Service_Signup(t *testing.T) {
 					},
 					DB: nil,
 					EncryptPasswordFunc: func(password string) (string, error) {
-						return "hey, a hashed password", nil
+						return "hashedpassword", nil
 					},
 					GenerateRefreshTokenFunc: func() (string, error) {
-						return "hey, a refresh token", nil
+						return refreshToken, nil
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
-						return nil
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) (int64, error) {
+						return userId, nil
+					},
+					GenerateAccessTokenFunc: func(userId int64) (string, error) {
+						return accessToken, nil
 					},
 				},
 			},
 			want: &types.Response{
 				StatusCode: http.StatusCreated,
-				Body:       gin.H{"message": "success"},
+				Body: gin.H{
+					"accessToken":  accessToken,
+					"refreshToken": refreshToken,
+					"userId":       userId,
+				},
 			},
 		},
 		{
@@ -58,16 +69,19 @@ func Test_Service_Signup(t *testing.T) {
 						return "", fmt.Errorf("something failed")
 					},
 					GenerateRefreshTokenFunc: func() (string, error) {
-						return "hey, a refresh token", nil
+						return refreshToken, nil
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
-						return nil
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) (int64, error) {
+						return userId, nil
+					},
+					GenerateAccessTokenFunc: func(userId int64) (string, error) {
+						return accessToken, nil
 					},
 				},
 			},
 			want: &types.Response{
 				StatusCode: http.StatusInternalServerError,
-				Body:       gin.H{"error": fmt.Errorf("something failed")},
+				Body:       gin.H{"error": "something failed"},
 			},
 		},
 		{
@@ -80,19 +94,50 @@ func Test_Service_Signup(t *testing.T) {
 					},
 					DB: nil,
 					EncryptPasswordFunc: func(password string) (string, error) {
-						return "hey, a hashed password", nil
+						return "hashedpassword", nil
 					},
 					GenerateRefreshTokenFunc: func() (string, error) {
-						return "hey, a refresh token", nil
+						return refreshToken, nil
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
-						return fmt.Errorf("something failed")
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) (int64, error) {
+						return 0, fmt.Errorf("something failed")
+					},
+					GenerateAccessTokenFunc: func(userId int64) (string, error) {
+						return accessToken, nil
 					},
 				},
 			},
 			want: &types.Response{
 				StatusCode: http.StatusInternalServerError,
-				Body:       gin.H{"error": fmt.Errorf("something failed")},
+				Body:       gin.H{"error": "something failed"},
+			},
+		},
+		{
+			name: "Should return an error if generate access token fail",
+			args: args{
+				&types.SignupInput{
+					UserData: types.UserData{
+						Contact:  "email-example@gmail.com",
+						Password: "theworstpasswordpossible",
+					},
+					DB: nil,
+					EncryptPasswordFunc: func(password string) (string, error) {
+						return "hashedpassword", nil
+					},
+					GenerateRefreshTokenFunc: func() (string, error) {
+						return refreshToken, nil
+					},
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) (int64, error) {
+						return userId, nil
+					},
+					GenerateAccessTokenFunc: func(userId int64) (string, error) {
+						return "", fmt.Errorf("something failed")
+					},
+				},
+			},
+			want: &types.Response{
+				StatusCode: http.StatusInternalServerError,
+				Body:       gin.H{"error": "something failed"},
 			},
 		},
 	}

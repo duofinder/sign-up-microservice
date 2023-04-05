@@ -2,6 +2,8 @@ package utils
 
 import (
 	"testing"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Test_Utils_Crypto_EncryptPassword(t *testing.T) {
@@ -13,16 +15,9 @@ func Test_Utils_Crypto_EncryptPassword(t *testing.T) {
 	if hash == "" {
 		t.Error("Hash should not be a empty string")
 	}
-}
 
-func Test_Utils_Crypto_ComparePasswordWithHash(t *testing.T) {
-	hash, err := EncryptPassword("123")
+	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte("123"))
 	if err != nil {
 		t.Error(err)
-	}
-
-	ok := ComparePasswordWithHash("123", hash)
-	if !ok {
-		t.Error("The password does not match")
 	}
 }

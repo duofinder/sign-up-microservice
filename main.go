@@ -32,6 +32,8 @@ func main() {
 		log.Fatalf("error trying to connect to database. err: %v", err)
 	}
 
+	defer db.Close()
+
 	handlers.SignupRoute(router, db)
 
 	srv := &http.Server{

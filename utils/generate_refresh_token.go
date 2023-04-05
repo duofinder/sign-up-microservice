@@ -3,7 +3,6 @@ package utils
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"log"
 )
 
 func GenerateRefreshToken() (string, error) {
@@ -14,8 +13,6 @@ func GenerateRefreshToken() (string, error) {
 	}
 
 	s := base64.URLEncoding.EncodeToString(b)
-
-	log.Println(s)
 
 	return s, nil
 }
