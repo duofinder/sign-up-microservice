@@ -24,7 +24,15 @@ func SignupService(input *types.SignupInput) *types.Response {
 		}
 	}
 
-	err = input.CreateAuthRepository(input.DB, input.Contact, hash, refreshToken)
+	userId, err := input.CreateAuthRepository(input.DB, input.Contact, hash, refreshToken)
+	if err != nil {
+		return &types.Response{
+			StatusCode: http.StatusInternalServerError,
+			Body:       gin.H{"error": err.Error()},
+		}
+	}
+
+	accessToken, err := input.GenerateAccessTokenFunc(userId)
 	if err != nil {
 		return &types.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -34,6 +42,10 @@ func SignupService(input *types.SignupInput) *types.Response {
 
 	return &types.Response{
 		StatusCode: http.StatusCreated,
-		Body:       gin.H{"message": "success"},
+		Body: gin.H{
+			"userId":       userId,
+			"accessToken":  accessToken,
+			"refreshToken": refreshToken,
+		},
 	}
 }

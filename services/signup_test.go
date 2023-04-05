@@ -35,8 +35,8 @@ func Test_Service_Signup(t *testing.T) {
 					GenerateRefreshTokenFunc: func() (string, error) {
 						return "hey, a refresh token", nil
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
-						return nil
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) (int64, error) {
+						return 1, nil
 					},
 				},
 			},
@@ -60,8 +60,8 @@ func Test_Service_Signup(t *testing.T) {
 					GenerateRefreshTokenFunc: func() (string, error) {
 						return "hey, a refresh token", nil
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
-						return nil
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) (int64, error) {
+						return 1, nil
 					},
 				},
 			},
@@ -85,8 +85,8 @@ func Test_Service_Signup(t *testing.T) {
 					GenerateRefreshTokenFunc: func() (string, error) {
 						return "hey, a refresh token", nil
 					},
-					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) error {
-						return fmt.Errorf("something failed")
+					CreateAuthRepository: func(db *sql.DB, contact, passwordHash, refreshToken string) (int64, error) {
+						return 0, fmt.Errorf("something failed")
 					},
 				},
 			},
