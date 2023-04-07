@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/duofinder/sign-up-microservice/types"
-	"github.com/gin-gonic/gin"
 )
 
 func SignupService(input *types.SignupInput) *types.Response {
@@ -12,7 +11,7 @@ func SignupService(input *types.SignupInput) *types.Response {
 	if err != nil {
 		return &types.Response{
 			StatusCode: http.StatusInternalServerError,
-			Body:       gin.H{"error": err.Error()},
+			Body:       types.Map{"error": err.Error()},
 		}
 	}
 
@@ -20,7 +19,7 @@ func SignupService(input *types.SignupInput) *types.Response {
 	if err != nil {
 		return &types.Response{
 			StatusCode: http.StatusInternalServerError,
-			Body:       gin.H{"error": err.Error()},
+			Body:       types.Map{"error": err.Error()},
 		}
 	}
 
@@ -28,7 +27,7 @@ func SignupService(input *types.SignupInput) *types.Response {
 	if err != nil {
 		return &types.Response{
 			StatusCode: http.StatusInternalServerError,
-			Body:       gin.H{"error": err.Error()},
+			Body:       types.Map{"error": err.Error()},
 		}
 	}
 
@@ -36,13 +35,13 @@ func SignupService(input *types.SignupInput) *types.Response {
 	if err != nil {
 		return &types.Response{
 			StatusCode: http.StatusInternalServerError,
-			Body:       gin.H{"error": err.Error()},
+			Body:       types.Map{"error": err.Error()},
 		}
 	}
 
 	return &types.Response{
 		StatusCode: http.StatusCreated,
-		Body: gin.H{
+		Body: types.Map{
 			"userId":       userId,
 			"accessToken":  accessToken,
 			"refreshToken": refreshToken,

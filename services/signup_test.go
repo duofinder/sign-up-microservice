@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/duofinder/sign-up-microservice/types"
-	"github.com/gin-gonic/gin"
 )
 
 func Test_Service_Signup(t *testing.T) {
@@ -28,7 +27,7 @@ func Test_Service_Signup(t *testing.T) {
 			name: "Should return success",
 			args: args{
 				&types.SignupInput{
-					UserData: types.UserData{
+					UserData: &types.UserData{
 						Contact:  "email-example@gmail.com",
 						Password: "theworstpasswordpossible",
 					},
@@ -49,7 +48,7 @@ func Test_Service_Signup(t *testing.T) {
 			},
 			want: &types.Response{
 				StatusCode: http.StatusCreated,
-				Body: gin.H{
+				Body: types.Map{
 					"accessToken":  accessToken,
 					"refreshToken": refreshToken,
 					"userId":       userId,
@@ -60,7 +59,7 @@ func Test_Service_Signup(t *testing.T) {
 			name: "Should return an error if encrypt password fail",
 			args: args{
 				&types.SignupInput{
-					UserData: types.UserData{
+					UserData: &types.UserData{
 						Contact:  "email-example@gmail.com",
 						Password: "theworstpasswordpossible",
 					},
@@ -81,14 +80,14 @@ func Test_Service_Signup(t *testing.T) {
 			},
 			want: &types.Response{
 				StatusCode: http.StatusInternalServerError,
-				Body:       gin.H{"error": "something failed"},
+				Body:       types.Map{"error": "something failed"},
 			},
 		},
 		{
 			name: "Should return an error if repository fail",
 			args: args{
 				&types.SignupInput{
-					UserData: types.UserData{
+					UserData: &types.UserData{
 						Contact:  "email-example@gmail.com",
 						Password: "theworstpasswordpossible",
 					},
@@ -109,14 +108,14 @@ func Test_Service_Signup(t *testing.T) {
 			},
 			want: &types.Response{
 				StatusCode: http.StatusInternalServerError,
-				Body:       gin.H{"error": "something failed"},
+				Body:       types.Map{"error": "something failed"},
 			},
 		},
 		{
 			name: "Should return an error if generate access token fail",
 			args: args{
 				&types.SignupInput{
-					UserData: types.UserData{
+					UserData: &types.UserData{
 						Contact:  "email-example@gmail.com",
 						Password: "theworstpasswordpossible",
 					},
@@ -137,7 +136,7 @@ func Test_Service_Signup(t *testing.T) {
 			},
 			want: &types.Response{
 				StatusCode: http.StatusInternalServerError,
-				Body:       gin.H{"error": "something failed"},
+				Body:       types.Map{"error": "something failed"},
 			},
 		},
 	}

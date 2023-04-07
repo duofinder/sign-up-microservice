@@ -1,2 +1,7 @@
 .env
 init.sql
+deploy_dev/.terraform
+deploy_dev/.terraform.lock.hcl
+deploy_dev/terraform.tfstate
+deploy_dev/terraform.tfstate.backup
+zip
