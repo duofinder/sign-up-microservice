@@ -14,6 +14,7 @@ resource "aws_lambda_function" "signup_lambda" {
     function_name = "signup"
     handler = "bin"
     runtime = "go1.x"
+    source_code_hash = filebase64sha256("../zip/bin.zip")
     role = aws_iam_role.signup_role.arn
     filename = data.archive_file.zip.output_path
     memory_size = 128
@@ -22,7 +23,6 @@ resource "aws_lambda_function" "signup_lambda" {
 
 resource "aws_iam_role" "signup_role" {
     name = "signup_role"
-
     assume_role_policy = jsonencode({
         Version: "2012-10-17"
         Statement = [
@@ -59,6 +59,14 @@ resource "aws_api_gateway_resource" "signup_resource" {
     path_part = "signup"
 }
 
+module "cors" {
+  source = "squidfunk/api-gateway-enable-cors/aws"
+  version = "0.3.3"
+
+  api_id          = aws_api_gateway_rest_api.duofinder_gateway.id
+  api_resource_id = aws_api_gateway_resource.signup_resource.id
+}
+
 resource "aws_api_gateway_method" "signup_method" {
   rest_api_id   = aws_api_gateway_rest_api.duofinder_gateway.id
   resource_id   = aws_api_gateway_resource.signup_resource.id
@@ -88,5 +96,3 @@ resource "aws_api_gateway_deployment" "deploy_gateway_in_dev" {
     create_before_destroy = true
   }
 }
-
-output "complete_unvoke_url"   {value = "${aws_api_gateway_deployment.deploy_gateway_in_dev.invoke_url}${aws_api_gateway_deployment.deploy_gateway_in_dev.stage_name}/${aws_api_gateway_resource.signup_resource.path_part}"}
