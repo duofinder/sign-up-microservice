@@ -20,7 +20,7 @@ import (
 func Signup(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	headers := map[string]string{
 		"Access-Control-Allow-Origin":  "*",
-		"Access-Control-Allow-Methods": "POST",
+		"Access-Control-Allow-Methods": "POST, OPTIONS",
 		"Content-Type":                 "application/json",
 	}
 
